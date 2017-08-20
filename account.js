@@ -1,6 +1,12 @@
 const store = new Map();
 const logins = new Map();
 const uuid = require('uuid');
+const dotenv = require("dotenv");
+const mysql = require("mysql");
+
+dotenv.config();
+
+const crypto = require("crypto");
 
 class Account {
   constructor(id) {
@@ -14,12 +20,34 @@ class Account {
     };
   }
 
-  static findByLogin(login) {
-    if (!logins.get(login)) {
-      logins.set(login, new Account());
-    }
-
-    return Promise.resolve(logins.get(login));
+  static async findByLogin(login, password) {
+    return new Promise((resolve, reject) => {
+      if (!logins.get(login)) {
+        var connection = mysql.createConnection({
+          host: process.env.DB_HOST,
+          user: process.env.DB_USER,
+          password: process.env.DB_PASS,
+          database: process.env.DB_SCHEMA,
+        });
+        connection.connect();
+        var sql = "SELECT * FROM members WHERE name=?";
+        
+        connection.query(sql, [login], function (error, results, fields) {
+          if (error)  {
+            reject(error);
+          }
+          var md5 = crypto.createHash("md5");
+          md5.update(password);
+          if (md5.digest("hex") == results[0].password) {
+            logins.set(login, new Account());
+            resolve(logins.get(login));
+          }
+        });
+        connection.end();
+      } else {
+        resolve(logins.get(login));
+      }
+    });
   }
 
   static async findById(ctx, id, token) { // eslint-disable-line no-unused-vars

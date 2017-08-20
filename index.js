@@ -193,8 +193,7 @@ provider.initialize({
   });
 
   router.post('/interaction/:grant/login', body, async (ctx, next) => {
-    const account = await Account.findByLogin(ctx.request.body.login);
-
+    const account = await Account.findByLogin(ctx.request.body.login, ctx.request.body.password);
     const result = {
       login: {
         account: account.accountId,
