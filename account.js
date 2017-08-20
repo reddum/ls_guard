@@ -3,10 +3,9 @@ const logins = new Map();
 const uuid = require('uuid');
 const dotenv = require("dotenv");
 const mysql = require("mysql");
+const crypto = require("crypto");
 
 dotenv.config();
-
-const crypto = require("crypto");
 
 class Account {
   constructor(id) {
@@ -20,9 +19,9 @@ class Account {
     };
   }
 
-  static async findByLogin(login, password) {
+  static async findByLogin(id, password) {
     return new Promise((resolve, reject) => {
-      if (!logins.get(login)) {
+      if (!logins.get(id)) {
         var connection = mysql.createConnection({
           host: process.env.DB_HOST,
           user: process.env.DB_USER,
@@ -32,20 +31,20 @@ class Account {
         connection.connect();
         var sql = "SELECT * FROM members WHERE name=?";
         
-        connection.query(sql, [login], function (error, results, fields) {
+        connection.query(sql, [id], function (error, results, fields) {
           if (error)  {
             reject(error);
           }
           var md5 = crypto.createHash("md5");
           md5.update(password);
           if (md5.digest("hex") == results[0].password) {
-            logins.set(login, new Account());
-            resolve(logins.get(login));
+            logins.set(id, new Account(id));
+            resolve(logins.get(id));
           }
         });
         connection.end();
       } else {
-        resolve(logins.get(login));
+        resolve(logins.get(id));
       }
     });
   }
