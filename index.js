@@ -88,7 +88,7 @@ const render = require('koa-ejs');
 const port = process.env.PORT || 3000;
 
 const Account = require('./account');
-const { config } = require('./settings');
+const { config } = require('./config');
 const { clients }  = require('./clients');
 const { certificates } = require('./certificates');
 
