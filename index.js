@@ -9,24 +9,6 @@
 // const port = process.env.PORT || 3000;
 // const issuer = process.env.ISSUER || 'http://localhost:3000';
 
-// const config = {
-//   acrValues: ['session', 'urn:mace:incommon:iap:bronze'],
-//   cookies: {
-//     long: { signed: true, maxAge: (1 * 24 * 60 * 60) * 1000 }, // 1 day in ms
-//     short: { signed: true },
-//   },
-//   findById: Account.findById,
-//   interactionUrl: function interactionUrl(ctx, interaction) { // eslint-disable-line no-unused-vars
-//     return `/interaction/${ctx.oidc.uuid}`;
-//   },
-//   ttl: {
-//     AccessToken: 1 * 60 * 60, // 1 hour in seconds
-//     AuthorizationCode: 10 * 60, // 10 minutes in seconds
-//     ClientCredentials: 10 * 60, // 10 minutes in seconds
-//     IdToken: 1 * 60 * 60, // 1 hour in seconds
-//     RefreshToken: 1 * 24 * 60 * 60, // 1 day in seconds
-//   },
-// };
 // const provider = new Provider(issuer, config);
 // const fs = require("fs");
 
@@ -106,7 +88,9 @@ const render = require('koa-ejs');
 const port = process.env.PORT || 3000;
 
 const Account = require('./account');
-const { config, clients, certificates } = require('./settings');
+const { config } = require('./settings');
+const { clients }  = require('./clients');
+const { certificates } = require('./certificates');
 
 const issuer = process.env.ISSUER || 'http://localhost:3000';
 
