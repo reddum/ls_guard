@@ -42,4 +42,17 @@ module.exports.config = {
     IdToken: 1 * 60 * 60, // 1 hour in seconds
     RefreshToken: 1 * 24 * 60 * 60, // 1 day in seconds
   },
+  async renderError(ctx, error) {
+    ctx.type = 'html';
+    ctx.body = `<!DOCTYPE html>
+                <head>
+                  <title>oops!!!! something went wrong</title>
+                </head>
+                <body>
+                  <h1>oops! something went wrong</h1>
+                  <pre>${JSON.stringify(error, null, 4)}</pre>
+                </body>
+                </html>`;
+  },
+
 };

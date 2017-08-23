@@ -34,12 +34,21 @@ class Account {
         connection.query(sql, [id], function (error, results, fields) {
           if (error)  {
             reject(error);
+            return;
           }
           var md5 = crypto.createHash("md5");
           md5.update(password);
+
+          if (results.length == 0) {
+            reject("[Error][Account] No such user : " + id);
+            return;
+          }
+
           if (md5.digest("hex") == results[0].password) {
             logins.set(id, new Account(id));
             resolve(logins.get(id));
+          } else {
+            reject("[Error][Account] Password not match");
           }
         });
         connection.end();

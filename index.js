@@ -1,5 +1,6 @@
 //http://localhost:3000/auth?client_id=newhire&redirect_uri=http://ct.com:5000/&response_type=code&scope=openid
 
+
 const Provider = require("oidc-provider");
 const path = require("path");
 const { set } = require("lodash");
@@ -7,6 +8,9 @@ const bodyParser = require("koa-body");
 const querystring = require("querystring");
 const Router = require("koa-router");
 const render = require("koa-ejs");
+
+const dotenv = require("dotenv");
+dotenv.config();
 
 const Account = require("./account");
 const { config } = require("./config");
@@ -62,8 +66,9 @@ provider
 
     router.get("/interaction/:grant", async (ctx, next) => {
       const details = await provider.interactionDetails(ctx.req);
+      console.log("details", details);
       const client = await provider.Client.find(details.params.client_id);
-
+      console.log("details.interaction.error", details.interaction.error);
       if (details.interaction.error === "login_required") {
         await ctx.render("login", {
           client,
@@ -140,3 +145,8 @@ provider
     console.error(err);
     process.exit(1);
   });
+
+
+provider.on('server_error', (err, ctx) => {
+  console.log(err);
+});
