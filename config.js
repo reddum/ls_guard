@@ -46,7 +46,7 @@ module.exports.config = {
     ctx.type = 'html';
     ctx.body = `<!DOCTYPE html>
                 <head>
-                  <title>oops!!!! something went wrong</title>
+                  <title>oops! something went wrong</title>
                 </head>
                 <body>
                   <h1>oops! something went wrong</h1>

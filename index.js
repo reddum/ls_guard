@@ -1,6 +1,5 @@
 //http://localhost:3000/auth?client_id=newhire&redirect_uri=http://ct.com:5000/&response_type=code&scope=openid
 
-
 const Provider = require("oidc-provider");
 const path = require("path");
 const { set } = require("lodash");

@@ -15,7 +15,7 @@ class Account {
 
   claims() {
     return {
-      sub: this.accountId, // it is essential to always return a sub claim
+      sub: this.accountId, 
     };
   }
 
